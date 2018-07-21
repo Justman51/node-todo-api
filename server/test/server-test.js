@@ -38,4 +38,30 @@ describe('POST/todos', ()=> {
      })
      
   });
+
+  it('should not create todo with invalid data', (done) => {
+      request(app)
+      .post('/todos')
+      .send()
+      .expect(400) 
+    //   .expect((res) => {
+    //     expect(res.body.text).toBe()
+    //   })
+    .end((err, res) => {
+        if(err) {
+            return done(err)
+        }
+        Todo.find().then((todos) => {
+            expect(todos.length).toBe(0);
+           // expect(todos[0].text).toBe(text);
+            done();
+        }).catch((e)=> {
+            done(e);
+        })
+
+    })
+     
+
+  })
+  
 });
