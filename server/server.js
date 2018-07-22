@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb')
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -53,6 +54,21 @@ app.get('/todos', (req, res) => {
 
 });
 
+app.get('/todos/:id', (req, res)=> {
+   var id = req.params.id
+   if(!ObjectID.isValid(id)) {
+     return res.send();
+   }
+  
+   var todo = Todo.findById(id).then((todo) => {
+     res.send({
+       todo
+     });
+  }, (e) => {
+    res.status(400).send(e);
+  });
+
+});
 
 
 //console.log('Just testing');
