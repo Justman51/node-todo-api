@@ -55,24 +55,45 @@ app.get('/todos', (req, res) => {
 });
 
 app.get('/todos/:id', (req, res)=> {
-   var id = req.params.id
+   var id = req.params.id;
    if(!ObjectID.isValid(id)) {
      return res.status(404).send();
    }
   
-   var todo = Todo.findById(id).then((todo) => {
+   var todo = Todo.findById(id)
+   .then((todo) => {
      if(!todo) {
       return res.status(404).send();
      }
      res.send({
        todo
      });
-  }).catch((e) => {
+  })
+  .catch((e) => {
     res.status(400).send(e);
   });
 
 });
 
+app.delete('/todos/:id', (req, res) => {
+  var id = req.params.id; //this is how we catch the id parameter
+   if(!ObjectID.isValid(id)) {
+     return res.status(404).send();
+   }
+ var todo = Todo.findByIdAndRemove({ _id: id})
+.then((todo) => {
+  if(!todo) {
+    return res.status(404).send();
+   }
+   res.send({
+     todo
+   });
+})
+.catch((e) => {
+  console.log(e)
+});
+
+});
 
 //console.log('Just testing');
 
