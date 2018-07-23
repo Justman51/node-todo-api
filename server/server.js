@@ -46,6 +46,21 @@ app.post('/todos', (req, res)=> {
     })
 });
 
+// Create User on Mongo database
+app.post('/users', (req, res) => { 
+  var body = _.pick(req.body, ['email', 'password']); // set what can be updated
+  var user = new User({
+    email: body.email,
+    password: body.password,
+  });
+  
+  user.save().then((doc) => {
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  })
+})
+
 app.get('/todos', (req, res) => {
   var allTodos = Todo.find().then((todos) => {
         res.send({
